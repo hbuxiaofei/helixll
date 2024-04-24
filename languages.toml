@@ -6,7 +6,7 @@
 # rust
 [[language]]
 name = "rust"
-auto-format = false
+auto-format = true
 
 [language-server.rust-analyzer]
 command = "rust-analyzer"
