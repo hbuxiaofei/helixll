@@ -2,6 +2,8 @@
 #   https://docs.helix-editor.com/master/languages.html
 #   https://github.com/helix-editor/helix/blob/master/languages.toml
 
+
+# rust
 [[language]]
 name = "rust"
 auto-format = false
@@ -11,3 +13,8 @@ command = "rust-analyzer"
 
 [language-server.rust-analyzer.config.check]
 command = "clippy"
+
+
+# cpp
+[[language]]
+name = "cpp"
