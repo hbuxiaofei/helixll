@@ -1,7 +1,49 @@
+# https://docs.helix-editor.com/configuration.html
+
+theme = "base16_transparent"
+
+[editor]
+true-color = true
+cursorline = true
+bufferline = "multiple"
+# line-number = "relative"
+mouse = false
+auto-completion=true
+auto-save=true
+auto-format=true
+text-width=80
+gutters = ["diff", "diagnostics", "line-numbers", "spacer"]
+# soft-wrap.enable = true
+# soft-wrap.max-indent-retain=80
+
+[editor.statusline]
+left = ["mode", "spinner", "file-modification-indicator", "read-only-indicator"]
+center = ["file-name"]
+right = ["diagnostics", "register", "selections", "position", "file-encoding", "file-line-ending", "file-type"]
+mode.normal = "NORMAL"
+mode.insert = "INSERT"
+mode.select = "SELECT"
+
+[editor.soft-wrap]
+enable = true
+
+[editor.indent-guides]
+render = true
+character = "┊"
+skip-levels = 1
+
+[editor.lsp]
+enable=true
+auto-signature-help=true
+display-messages = true
+
+################ key map ######################
+
+
 [keys.normal]
 # Quick iteration on config changes
-C-o = ":config-open"
-C-r = ":config-reload"
+# C-o = ":config-open"
+# C-r = ":config-reload"
 
 # Some nice Helix stuff
 C-h = "select_prev_sibling"
@@ -10,8 +52,8 @@ C-k = "expand_selection"
 C-l = "select_next_sibling"
 
 # Personal preference
-o = ["open_below", "normal_mode"]
-O = ["open_above", "normal_mode"]
+o = ["open_below", "insert_mode"]
+O = ["open_above", "insert_mode"]
 
 # Muscle memory
 "{" = ["goto_prev_paragraph", "collapse_selection"]
