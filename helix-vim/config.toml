@@ -1,6 +1,6 @@
 # https://docs.helix-editor.com/configuration.html
 
-theme = "base16_transparent"
+theme = "molokai"
 
 [editor]
 true-color = true
