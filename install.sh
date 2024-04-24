@@ -65,6 +65,27 @@ if ! command -v fzf >/dev/null 2>&1; then
     exit 1
 fi
 
+
+if command -v bat >/dev/null 2>&1; then
+    echo -e "\033[33m- [Warn] bat command already exist\033[0m"
+else
+    if [ ! -e bat-v0.24.0-x86_64-unknown-linux-gnu.tar.gz ]; then
+        wget https://github.com/sharkdp/bat/releases/download/v0.24.0/bat-v0.24.0-x86_64-unknown-linux-gnu.tar.gz
+    fi
+
+    if [ -e bat-v0.24.0-x86_64-unknown-linux-gnu.tar.gz ]; then
+        tar -xvf bat-v0.24.0-x86_64-unknown-linux-gnu.tar.gz
+        chmod +x bat-v0.24.0-x86_64-unknown-linux-gnu/bat
+        [ ! -d ~/.cargo/bin ] && mkdir -p ~/.cargo/bin
+        mv bat-v0.24.0-x86_64-unknown-linux-gnu/bat  ~/.cargo/bin/ && rm -rf bat-v0.24.0-x86_64-unknown-linux-gnu
+    fi
+fi
+if ! command -v bat >/dev/null 2>&1; then
+    echo -e "\033[33m- [Err] bat command install failed\033[0m"
+    exit 1
+fi
+
+
 if [ ! -d ~/.config/helix ]; then
     mkdir -p ~/.config/helix
 fi
@@ -77,7 +98,7 @@ cp -f ./languages.toml ~/.config/helix/
 cat > /usr/local/bin/helix << EOF
 #!/bin/bash
 if [ -z "\$1" ]; then
-    hx \$(fzf 2>/dev/null)
+    hx \$(fzf --no-mouse --height 80% --layout=reverse --ansi --preview 'bat --color=always --line-range=:100 {}')
 else
     hx \$@
 fi

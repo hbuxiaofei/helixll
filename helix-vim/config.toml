@@ -64,6 +64,7 @@ O = ["open_above", "insert_mode"]
 G = "goto_file_end"
 "%" = "match_brackets"
 V = ["select_mode", "extend_to_line_bounds"]
+c = ["select_mode", "move_next_word_start"]
 C = ["extend_to_line_end", "yank_main_selection_to_clipboard", "delete_selection", "insert_mode"]
 D = ["extend_to_line_end", "yank_main_selection_to_clipboard", "delete_selection"]
 S = "surround_add" # Would be nice to be able to do something after this but it isn't chainable
@@ -140,6 +141,8 @@ g = { g = ["select_mode", "extend_to_line_bounds", "goto_file_start", "extend_to
 esc = ["collapse_selection", "normal_mode"]
 
 [keys.select]
+w = ["delete_selection", "insert_mode"]
+
 # Muscle memory
 "{" = ["extend_to_line_bounds", "goto_prev_paragraph"]
 "}" = ["extend_to_line_bounds", "goto_next_paragraph"]
