@@ -14,7 +14,7 @@ local function is_text_file(path)
     end
 
     local is_text = true
-    local i = 0
+    local i = 1
     local max_bytes = 1024
 
     for i = 1, max_bytes do
@@ -35,6 +35,10 @@ local function is_text_file(path)
 end
 
 local function read(path, height)
+  if not is_text_file(path) then
+      return nil
+  end
+
   local p = io.open(path)
 
   if p == nil then
@@ -64,65 +68,51 @@ local function is_dir(n)
   return n.is_dir or (n.symlink and n.symlink.is_dir)
 end
 
-local function render_right_pane(ctx)
-    local node = ctx.app.focused_node
-    if is_dir(node) then
-        return ""
-    end
-
-    local abs_path = ctx.app.focused_node.absolute_path
-
-    if node.is_symlink then
-        if node.is_broken then
-            return ""
-        else
-            abs_path = node.symlink.absolute_path
-        end
-    end
-
-    if is_text_file(abs_path) then
-        return abs_path .. "\n\n" .. read(abs_path, 100)
-    end
-
-    return abs_path
+local function stat(node)
+  return xplr.util.to_yaml(xplr.util.node(node.absolute_path))
 end
 
-local args = {}
-args.right_pane_renderer = args.right_pane_renderer or render_right_pane
+xplr.fn.custom.preview_pane = {}
+xplr.fn.custom.preview_pane.render = function(ctx)
+  local title = nil
+  local body = ""
+  local n = ctx.app.focused_node
+  if n and n.canonical then
+    n = n.canonical
+  end
 
-local xplr = xplr
-xplr.fn.custom.tri_pane = {}
+  if n then
+    title = { format = n.absolute_path, style = xplr.util.lscolor(n.absolute_path) }
+    if n.is_file then
+      body = read(n.absolute_path, ctx.layout_size.height) or stat(n)
+    else
+      body = stat(n)
+    end
+  end
 
-xplr.fn.custom.tri_pane.render_right_pane = args.right_pane_renderer
+  return { CustomParagraph = { ui = { title = title }, body = body } }
+end
 
-
-local right_pane = {
-  CustomContent = {
-    body = {
-      DynamicParagraph = {
-        render = "custom.tri_pane.render_right_pane",
+local preview_pane = { Dynamic = "custom.preview_pane.render" }
+local split_preview = {
+  Horizontal = {
+    config = {
+      constraints = {
+        { Percentage = 50 },
+        { Percentage = 50 },
       },
+    },
+    splits = {
+      "Table",
+      preview_pane,
     },
   },
 }
 
-xplr.config.layouts.builtin.default = {
-  Horizontal = {
-    config = {
-      margin = 1,
-      horizontal_margin = 1,
-      vertical_margin = 1,
-      constraints = {
-        { Percentage = 50 },
-        { Percentage = 50 },
-      }
-    },
-    splits = {
-      "Table",
-      right_pane ,
-    }
-  }
-}
+-- xplr.config.layouts.builtin.default =
+    -- xplr.util.layout_replace(xplr.config.layouts.builtin.default, "Table", split_preview)
+
+xplr.config.layouts.builtin.default = split_preview
 
 local home = os.getenv("HOME")
 package.path = home
