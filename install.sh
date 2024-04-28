@@ -85,6 +85,10 @@ if ! command -v bat >/dev/null 2>&1; then
     exit 1
 fi
 
+if [ ! -d ~/.config/xplr ]; then
+    mkdir -p ~/.config/xplr
+fi
+cp -rf xplr/* ~/.config/xplr/
 
 if [ ! -d ~/.config/helix ]; then
     mkdir -p ~/.config/helix
