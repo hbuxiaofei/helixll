@@ -11,11 +11,11 @@ else
         wget https://dl.fedoraproject.org/pub/epel/9/Everything/x86_64/Packages/h/helix-24.03-2.el9.x86_64.rpm
         rpm -ivh helix-24.03-2.el9.x86_64.rpm
     else
-        if [ ! -e helix.24.3.tar.gz ]; then
-            wget https://github.com/hbuxiaofei/helixll/releases/download/v0.1.0/helix.24.3.tar.gz
+        if [ ! -e helix-24.03-x86_64-linux.tar.gz ]; then
+            wget https://github.com/hbuxiaofei/helixll/releases/download/v0.3.0/helix-24.03-x86_64-linux.tar.gz
         fi
-        if [ -e helix.24.3.tar.gz ]; then
-            tar -xf helix.24.3.tar.gz --strip-components 1 -C /usr/
+        if [ -e helix-24.03-x86_64-linux.tar.gz ]; then
+            tar -xf helix-24.03-x86_64-linux.tar.gz --strip-components 1 -C /usr/
         fi
     fi
 fi
