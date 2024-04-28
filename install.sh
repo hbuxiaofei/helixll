@@ -25,6 +25,24 @@ if ! command -v hx >/dev/null 2>&1; then
     exit 1
 fi
 
+if command -v xplr >/dev/null 2>&1; then
+    echo -e "\033[33m- [Warn] xplr command already exist\033[0m"
+else
+    if [ ! -e xplr-linux-x86_64.v0.21.7.tar.gz ]; then
+        wget https://github.com/hbuxiaofei/helixll/releases/download/v0.2.0/xplr-linux-x86_64.v0.21.7.tar.gz
+    fi
+    if [ -e xplr-linux-x86_64.v0.21.7.tar.gz ]; then
+        tar -xf xplr-linux-x86_64.v0.21.7.tar.gz
+        [ ! -d ~/.cargo/bin ] && mkdir -p ~/.cargo/bin
+        mv xplr ~/.cargo/bin/
+    fi
+fi
+
+if ! command -v xplr >/dev/null 2>&1; then
+    echo -e "\033[33m- [Err] xplr command install failed\033[0m"
+    exit 1
+fi
+
 if command -v rust-analyzer  >/dev/null 2>&1; then
     echo -e "\033[33m- [Warn] rust-analyzer command already exist\033[0m"
 else
@@ -88,7 +106,7 @@ fi
 if [ ! -d ~/.config/xplr ]; then
     mkdir -p ~/.config/xplr
 fi
-cp -rf xplr/* ~/.config/xplr/
+cp -rf xplr-config/* ~/.config/xplr/
 
 if [ ! -d ~/.config/helix ]; then
     mkdir -p ~/.config/helix
