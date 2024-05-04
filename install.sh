@@ -1,5 +1,10 @@
 #!/bin/bash
 
+INSTALL_BIN=/usr/local/bin
+export PATH=$INSTALL_BIN:$PATH
+
+INSTALL_HOME=$HOME
+[ -n "$SUDO_USER" ] && INSTALL_HOME=/home/$SUDO_USER
 
 cd $(dirname $0)
 
@@ -20,6 +25,8 @@ else
     fi
 fi
 
+[ ! -d $INSTALL_BIN ] && mkdir -p $INSTALL_BIN
+
 if ! command -v hx >/dev/null 2>&1; then
     echo -e "\033[33m- [Err] hx command install failed\033[0m"
     exit 1
@@ -33,8 +40,7 @@ else
     fi
     if [ -e xplr-linux-x86_64.v0.21.7.tar.gz ]; then
         tar -xf xplr-linux-x86_64.v0.21.7.tar.gz
-        [ ! -d ~/.cargo/bin ] && mkdir -p ~/.cargo/bin
-        mv xplr ~/.cargo/bin/
+        mv xplr ${INSTALL_BIN}/
     fi
 fi
 
@@ -53,8 +59,7 @@ else
     if [ -e rust-analyzer-x86_64-unknown-linux-gnu.gz ]; then
         gunzip rust-analyzer-x86_64-unknown-linux-gnu.gz
         chmod +x rust-analyzer-x86_64-unknown-linux-gnu
-        [ ! -d ~/.cargo/bin ] && mkdir -p ~/.cargo/bin
-        mv rust-analyzer-x86_64-unknown-linux-gnu ~/.cargo/bin/rust-analyzer
+        mv rust-analyzer-x86_64-unknown-linux-gnu ${INSTALL_BIN}/rust-analyzer
     fi
 fi
 
@@ -74,8 +79,7 @@ else
     if [ -e fzf-0.50.0-linux_amd64.tar.gz ]; then
         tar -xvf fzf-0.50.0-linux_amd64.tar.gz
         chmod +x fzf
-        [ ! -d ~/.cargo/bin ] && mkdir -p ~/.cargo/bin
-        mv fzf ~/.cargo/bin/
+        mv fzf ${INSTALL_BIN}/
     fi
 fi
 if ! command -v fzf >/dev/null 2>&1; then
@@ -94,8 +98,7 @@ else
     if [ -e bat-v0.24.0-x86_64-unknown-linux-gnu.tar.gz ]; then
         tar -xvf bat-v0.24.0-x86_64-unknown-linux-gnu.tar.gz
         chmod +x bat-v0.24.0-x86_64-unknown-linux-gnu/bat
-        [ ! -d ~/.cargo/bin ] && mkdir -p ~/.cargo/bin
-        mv bat-v0.24.0-x86_64-unknown-linux-gnu/bat  ~/.cargo/bin/ && rm -rf bat-v0.24.0-x86_64-unknown-linux-gnu
+        mv bat-v0.24.0-x86_64-unknown-linux-gnu/bat ${INSTALL_BIN}/ && rm -rf bat-v0.24.0-x86_64-unknown-linux-gnu
     fi
 fi
 if ! command -v bat >/dev/null 2>&1; then
@@ -103,21 +106,19 @@ if ! command -v bat >/dev/null 2>&1; then
     exit 1
 fi
 
-if [ ! -d ~/.config/xplr ]; then
-    mkdir -p ~/.config/xplr
+if [ ! -d ${INSTALL_HOME}/.config/xplr ]; then
+    mkdir -p ${INSTALL_HOME}/.config/xplr
 fi
-cp -rf xplr-config/* ~/.config/xplr/
+cp -rf xplr-config/* ${INSTALL_HOME}/.config/xplr/
 
-if [ ! -d ~/.config/helix ]; then
-    mkdir -p ~/.config/helix
+if [ ! -d ${INSTALL_HOME}/.config/helix ]; then
+    mkdir -p ${INSTALL_HOME}/.config/helix
 fi
-cp -f helix-vim/config.toml ~/.config/helix/
+cp -f helix-vim/config.toml ${INSTALL_HOME}/.config/helix/
 
-cp -f ./languages.toml ~/.config/helix/
+cp -f ./languages.toml ${INSTALL_HOME}/.config/helix/
 
-[ ! -d /usr/local/bin ] && mkdir -p /usr/local/bin
-
-cat > /usr/local/bin/helix << EOF
+cat > ${INSTALL_BIN}/helix << EOF
 #!/bin/bash
 if [ -z "\$1" ]; then
     hx \$(fzf --no-mouse --height 80% --layout=reverse --ansi --preview 'bat --color=always --line-range=:100 {}')
@@ -126,7 +127,7 @@ else
 fi
 exit 0
 EOF
-chmod +x /usr/local/bin/helix
+chmod +x ${INSTALL_BIN}/helix
 
 echo -e "\033[32m- [Info] Install successfully...\033[0m"
 
