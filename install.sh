@@ -115,6 +115,7 @@ if [ ! -d ${INSTALL_HOME}/.config/helix ]; then
     mkdir -p ${INSTALL_HOME}/.config/helix
 fi
 cp -f helix-vim/config.toml ${INSTALL_HOME}/.config/helix/
+cp -rf themes  ${INSTALL_HOME}/.config/helix/
 
 cp -f ./languages.toml ${INSTALL_HOME}/.config/helix/
 

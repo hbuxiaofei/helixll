@@ -1,6 +1,6 @@
 # https://docs.helix-editor.com/configuration.html
 
-theme = "molokai"
+theme = "molokai-new"
 
 [editor]
 true-color = true
@@ -29,7 +29,7 @@ enable = true
 
 [editor.indent-guides]
 render = true
-character = "┊"
+character = "┆"
 skip-levels = 1
 
 [editor.lsp]
