@@ -5,7 +5,7 @@ theme = "molokai-new"
 [editor]
 true-color = true
 cursorline = true
-bufferline = "multiple"
+bufferline = "always"
 # line-number = "relative"
 mouse = false
 auto-completion=true
