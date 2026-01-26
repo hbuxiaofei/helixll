@@ -8,14 +8,22 @@ INSTALL_HOME=$HOME
 
 cd $(dirname $0)
 
-HX_VERSION="25.07.1-5.el9.x86_64"
+HX_VERSION="25.07.1-5"
 if command -v hx >/dev/null 2>&1; then
     echo -e "\033[33m- [Warn] hx command already exist\033[0m"
 else
-    check_os=$(rpm -qa 2>/dev/null | grep release | grep el9.x86_64)
-    if [ -n "$check_os" ]; then
-        wget https://dl.fedoraproject.org/pub/epel/9/Everything/x86_64/Packages/h/helix-${HX_VERSION}.rpm
-        rpm -ivh helix-${HX_VERSION}.rpm
+    check_el9=$(uname -r 2>/dev/null | grep "el9.x86_64")
+    check_el10=$(uname -r 2>/dev/null | grep "el10.x86_64")
+    if [ -n "$check_el9" ]; then
+        if [ ! -e helix-${HX_VERSION}.el9.x86_64.rpm ]; then
+            wget https://dl.fedoraproject.org/pub/epel/9/Everything/x86_64/Packages/h/helix-${HX_VERSION}.el9.x86_64.rpm
+        fi
+        rpm -ivh helix-${HX_VERSION}.el9.x86_64.rpm
+    elif [ -n "$check_el10" ]; then
+        if [ ! -e helix-${HX_VERSION}.el10_2.x86_64.rpm ]; then
+            wget https://dl.fedoraproject.org/pub/epel/10/Everything/x86_64/Packages/h/helix-${HX_VERSION}.el10_2.x86_64.rpm
+        fi
+        rpm -ivh helix-${HX_VERSION}.el10_2.x86_64.rpm
     else
         if [ ! -e helix-24.03-x86_64-linux.tar.gz ]; then
             wget https://github.com/hbuxiaofei/helixll/releases/download/v0.3.0/helix-24.03-x86_64-linux.tar.gz
