@@ -41,23 +41,6 @@ if ! command -v hx >/dev/null 2>&1; then
     exit 1
 fi
 
-if command -v xplr >/dev/null 2>&1; then
-    echo -e "\033[33m- [Warn] xplr command already exist\033[0m"
-else
-    if [ ! -e xplr-linux-x86_64.v0.21.7.tar.gz ]; then
-        wget https://github.com/hbuxiaofei/helixll/releases/download/v0.2.0/xplr-linux-x86_64.v0.21.7.tar.gz
-    fi
-    if [ -e xplr-linux-x86_64.v0.21.7.tar.gz ]; then
-        tar -xf xplr-linux-x86_64.v0.21.7.tar.gz
-        mv xplr ${INSTALL_BIN}/
-    fi
-fi
-
-if ! command -v xplr >/dev/null 2>&1; then
-    echo -e "\033[33m- [Err] xplr command install failed\033[0m"
-    exit 1
-fi
-
 if command -v rust-analyzer  >/dev/null 2>&1; then
     echo -e "\033[33m- [Warn] rust-analyzer command already exist\033[0m"
 else
@@ -77,26 +60,6 @@ if ! command -v rust-analyzer >/dev/null 2>&1; then
     exit 1
 fi
 
-
-if command -v fzf >/dev/null 2>&1; then
-    echo -e "\033[33m- [Warn] fzf command already exist\033[0m"
-else
-    if [ ! -e fzf-0.50.0-linux_amd64.tar.gz ]; then
-        wget https://github.com/junegunn/fzf/releases/download/0.50.0/fzf-0.50.0-linux_amd64.tar.gz
-    fi
-
-    if [ -e fzf-0.50.0-linux_amd64.tar.gz ]; then
-        tar -xvf fzf-0.50.0-linux_amd64.tar.gz
-        chmod +x fzf
-        mv fzf ${INSTALL_BIN}/
-    fi
-fi
-if ! command -v fzf >/dev/null 2>&1; then
-    echo -e "\033[33m- [Err] fzf command install failed\033[0m"
-    exit 1
-fi
-
-
 if command -v bat >/dev/null 2>&1; then
     echo -e "\033[33m- [Warn] bat command already exist\033[0m"
 else
@@ -115,27 +78,55 @@ if ! command -v bat >/dev/null 2>&1; then
     exit 1
 fi
 
-if [ ! -d ${INSTALL_HOME}/.config/xplr ]; then
-    mkdir -p ${INSTALL_HOME}/.config/xplr
-fi
-cp -rf xplr-config/* ${INSTALL_HOME}/.config/xplr/
-
 if [ ! -d ${INSTALL_HOME}/.config/helix ]; then
     mkdir -p ${INSTALL_HOME}/.config/helix
 fi
 cp -f helix-vim/config.toml ${INSTALL_HOME}/.config/helix/
-cp -rf themes  ${INSTALL_HOME}/.config/helix/
+cp -f helix-vim/hx-git-delta ${INSTALL_HOME}/.config/helix/ && chmod +x ${INSTALL_HOME}/.config/helix/hx-git-delta
+cp -f helix-vim/hx-picker ${INSTALL_HOME}/.config/helix/ && chmod +x ${INSTALL_HOME}/.config/helix/hx-picker
+cp -rf themes ${INSTALL_HOME}/.config/helix/
 
 cp -f ./languages.toml ${INSTALL_HOME}/.config/helix/
 
 cat > ${INSTALL_BIN}/helix << EOF
 #!/bin/bash
-if [ -z "\$1" ]; then
-    hx \$(fzf --no-mouse --height 80% --layout=reverse --ansi --preview 'bat --color=always --line-range=:100 {}')
-else
-    hx \$@
-fi
-exit 0
+
+TEMP_LAYOUT=\$(mktemp)
+
+cat > "\$TEMP_LAYOUT" << EOF
+default_mode "locked"
+show_startup_tips false
+mouse_mode false
+advanced_mouse_actions false
+pane_frames false
+on_force_close "quit"
+copy_on_select false
+disable_session_metadata true
+
+keybinds clear-defaults=true {
+    locked {
+        bind "Ctrl g" { SwitchToMode "normal"; }
+    }
+    shared_except "locked" {
+        bind "Ctrl g" { SwitchToMode "locked"; }
+    }
+}
+
+layout {
+    pane name="helix-editor" {
+        command "hx"
+        args "\$@"
+        close_on_exit true
+    }
+    pane size=1 borderless=true {
+       plugin location="zellij:status-bar"
+    }
+}
+EOF
+
+zellij --layout \$TEMP_LAYOUT
+
+rm -f "\$TEMP_LAYOUT"
 EOF
 chmod +x ${INSTALL_BIN}/helix
 
