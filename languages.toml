@@ -18,6 +18,7 @@ command = "clippy"
 # cpp
 [[language]]
 name = "cpp"
+language-servers = [ "clangd" ]
 
 
 # golang

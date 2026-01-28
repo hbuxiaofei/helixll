@@ -8,34 +8,37 @@ INSTALL_HOME=$HOME
 
 cd $(dirname $0)
 
-HX_VERSION="25.07.1-5"
+HX_VERSION="25.07.1"
 if command -v hx >/dev/null 2>&1; then
-    echo -e "\033[33m- [Warn] hx command already exist\033[0m"
+    echo -e "\033[32m- [Info] hx command already exist\033[0m"
 else
-    check_el9=$(uname -r 2>/dev/null | grep "el9.x86_64")
-    check_el10=$(uname -r 2>/dev/null | grep "el10.x86_64")
-    if [ -n "$check_el9" ]; then
-        if [ ! -e helix-${HX_VERSION}.el9.x86_64.rpm ]; then
-            wget https://dl.fedoraproject.org/pub/epel/9/Everything/x86_64/Packages/h/helix-${HX_VERSION}.el9.x86_64.rpm
+    if command -v dnf >/dev/null 2>&1; then
+        dnf install -y -q helix
+    fi
+    if ! command -v hx >/dev/null 2>&1; then
+        if [ ! -e helix-${HX_VERSION}-x86_64-linux.tar.xz ]; then
+            wget https://github.com/helix-editor/helix/releases/download/${HX_VERSION}/helix-${HX_VERSION}-x86_64-linux.tar.xz
         fi
-        rpm -ivh helix-${HX_VERSION}.el9.x86_64.rpm
-    elif [ -n "$check_el10" ]; then
-        if [ ! -e helix-${HX_VERSION}.el10_2.x86_64.rpm ]; then
-            wget https://dl.fedoraproject.org/pub/epel/10/Everything/x86_64/Packages/h/helix-${HX_VERSION}.el10_2.x86_64.rpm
-        fi
-        rpm -ivh helix-${HX_VERSION}.el10_2.x86_64.rpm
-    else
-        if [ ! -e helix-24.03-x86_64-linux.tar.gz ]; then
-            wget https://github.com/hbuxiaofei/helixll/releases/download/v0.3.0/helix-24.03-x86_64-linux.tar.gz
-        fi
-        if [ -e helix-24.03-x86_64-linux.tar.gz ]; then
-            tar -xf helix-24.03-x86_64-linux.tar.gz --strip-components 1 -C /usr/
+        if [ -e helix-${HX_VERSION}-x86_64-linux.tar.xz ]; then
+            tar -xf helix-${HX_VERSION}-x86_64-linux.tar.xz -C ${INSTALL_BIN}/
+            ln -sf ${INSTALL_BIN}/helix-${HX_VERSION}-x86_64-linux/hx ${INSTALL_BIN}/
         fi
     fi
 fi
 if ! command -v hx >/dev/null 2>&1; then
-    echo -e "\033[33m- [Err] hx command install failed\033[0m"
+    echo -e "\033[31m- [Err] hx command install failed\033[0m"
     exit 1
+fi
+
+if command -v tig >/dev/null 2>&1; then
+    echo -e "\033[32m- [Info] tig command already exist\033[0m"
+else
+    if command -v dnf >/dev/null 2>&1; then
+        dnf install -y -q tig
+    fi
+fi
+if ! command -v tig >/dev/null 2>&1; then
+    echo -e "\033[33m- [Warn] tig command not found\033[0m"
 fi
 
 
@@ -43,7 +46,7 @@ fi
 
 ZJ_VERSION="v0.43.1"
 if command -v zellij >/dev/null 2>&1; then
-    echo -e "\033[33m- [Warn] zellij command already exist\033[0m"
+    echo -e "\033[32m- [Info] zellij command already exist\033[0m"
 else
     if [ ! -e zellij-x86_64-unknown-linux-musl.tar.gz ]; then
         wget https://github.com/zellij-org/zellij/releases/download/${ZJ_VERSION}/zellij-x86_64-unknown-linux-musl.tar.gz
@@ -53,12 +56,51 @@ else
     fi
 fi
 if ! command -v zellij >/dev/null 2>&1; then
-    echo -e "\033[33m- [Err] zellij command install failed\033[0m"
+    echo -e "\033[31m- [Err] zellij command install failed\033[0m"
+    exit 1
+fi
+
+YZ_VERSION="v26.1.22"
+if command -v yazi >/dev/null 2>&1; then
+    echo -e "\033[32m- [Info] yazi command already exist\033[0m"
+else
+    if [ ! -e yazi-x86_64-unknown-linux-musl.zip ]; then
+        wget https://github.com/sxyazi/yazi/releases/download/${YZ_VERSION}/yazi-x86_64-unknown-linux-musl.zip
+    fi
+
+    if [ -e yazi-x86_64-unknown-linux-musl.zip ]; then
+        unzip yazi-x86_64-unknown-linux-musl.zip
+        mv yazi-x86_64-unknown-linux-musl/ya ${INSTALL_BIN}/
+        mv yazi-x86_64-unknown-linux-musl/yazi ${INSTALL_BIN}/
+        rm -rf yazi-x86_64-unknown-linux-musl
+    fi
+fi
+if ! command -v yazi >/dev/null 2>&1; then
+    echo -e "\033[31m- [Err] yazi command install failed\033[0m"
+    exit 1
+fi
+
+DT_VERSION="0.18.2"
+if command -v delta >/dev/null 2>&1; then
+    echo -e "\033[32m- [Info] delta command already exist\033[0m"
+else
+    if [ ! -e delta-${DT_VERSION}-x86_64-unknown-linux-musl.tar.gz ]; then
+        wget https://github.com/dandavison/delta/releases/download/${DT_VERSION}/delta-${DT_VERSION}-x86_64-unknown-linux-musl.tar.gz
+    fi
+
+    if [ -e delta-${DT_VERSION}-x86_64-unknown-linux-musl.tar.gz ]; then
+        tar -xf delta-${DT_VERSION}-x86_64-unknown-linux-musl.tar.gz
+        mv delta-${DT_VERSION}-x86_64-unknown-linux-musl/delta ${INSTALL_BIN}/
+        rm -rf delta-${DT_VERSION}-x86_64-unknown-linux-musl
+    fi
+fi
+if ! command -v delta >/dev/null 2>&1; then
+    echo -e "\033[31m- [Err] delta command install failed\033[0m"
     exit 1
 fi
 
 if command -v rust-analyzer  >/dev/null 2>&1; then
-    echo -e "\033[33m- [Warn] rust-analyzer command already exist\033[0m"
+    echo -e "\033[32m- [Info] rust-analyzer command already exist\033[0m"
 else
     if [ ! -e rust-analyzer-x86_64-unknown-linux-gnu.gz ]; then
         wget https://github.com/rust-lang/rust-analyzer/releases/download/2024-01-29/rust-analyzer-x86_64-unknown-linux-gnu.gz
@@ -70,9 +112,8 @@ else
         mv rust-analyzer-x86_64-unknown-linux-gnu ${INSTALL_BIN}/rust-analyzer
     fi
 fi
-
 if ! command -v rust-analyzer >/dev/null 2>&1; then
-    echo -e "\033[33m- [Err] rust-analyzer command install failed\033[0m"
+    echo -e "\033[31m- [Err] rust-analyzer command install failed\033[0m"
     exit 1
 fi
 
@@ -101,6 +142,7 @@ pane_frames false
 on_force_close "quit"
 copy_on_select false
 disable_session_metadata true
+styled_underlines false
 
 keybinds clear-defaults=true {
     locked {
