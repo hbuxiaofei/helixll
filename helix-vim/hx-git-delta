@@ -4,6 +4,7 @@ COMMAND=$1
 
 export DELTA_CMD=delta
 export DELTA_DIFFFILTER="delta --color-only"
+export DELTA_DARK=true
 export DELTA_NAVIGATE=true
 export DELTA_SIDEBYSIDE=false
 export DELTA_LINENUMBERS=true
@@ -14,6 +15,7 @@ do_delta()
     git --config-env=core.pager=DELTA_CMD \
         --config-env=interactive.diffFilter=DELTA_DIFFFILTER \
         --config-env=delta.navigate=DELTA_NAVIGATE  \
+        --config-env=delta.dark=DELTA_DARK \
         --config-env=delta.side-by-side=DELTA_SIDEBYSIDE \
         --config-env=delta.line-numbers=DELTA_LINENUMBERS \
         $@
