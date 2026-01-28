@@ -76,24 +76,6 @@ if ! command -v rust-analyzer >/dev/null 2>&1; then
     exit 1
 fi
 
-if command -v bat >/dev/null 2>&1; then
-    echo -e "\033[33m- [Warn] bat command already exist\033[0m"
-else
-    if [ ! -e bat-v0.24.0-x86_64-unknown-linux-gnu.tar.gz ]; then
-        wget https://github.com/sharkdp/bat/releases/download/v0.24.0/bat-v0.24.0-x86_64-unknown-linux-gnu.tar.gz
-    fi
-
-    if [ -e bat-v0.24.0-x86_64-unknown-linux-gnu.tar.gz ]; then
-        tar -xvf bat-v0.24.0-x86_64-unknown-linux-gnu.tar.gz
-        chmod +x bat-v0.24.0-x86_64-unknown-linux-gnu/bat
-        mv bat-v0.24.0-x86_64-unknown-linux-gnu/bat ${INSTALL_BIN}/ && rm -rf bat-v0.24.0-x86_64-unknown-linux-gnu
-    fi
-fi
-if ! command -v bat >/dev/null 2>&1; then
-    echo -e "\033[33m- [Err] bat command install failed\033[0m"
-    exit 1
-fi
-
 if [ ! -d ${INSTALL_HOME}/.config/helix ]; then
     mkdir -p ${INSTALL_HOME}/.config/helix
 fi
