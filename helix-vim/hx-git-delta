@@ -60,8 +60,18 @@ do_tig_first()
 
 }
 
-if [ "$COMMAND" == diff ]; then
-    do_delta_first $@
-else
-    do_tig_first $@
-fi
+
+case $COMMAND in
+    diff|show)
+        do_delta_first $@
+        ;;
+    blame)
+        do_tig_first $@
+        ;;
+    log|status|grep)
+        do_git $@
+        ;;
+    *)
+        do_git $@
+        ;;
+esac

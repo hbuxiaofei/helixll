@@ -4,7 +4,17 @@
 #
 
 tempfile=$(mktemp)
-yazi --chooser-file="$tempfile" $@
+if command yazi 2>/dev/null; then
+    yazi --chooser-file="$tempfile" $@
+else
+    dir=$(dirname $1 2>/dev/null)
+    filepath=$(basename $1 2>/dev/null)
+    if [ -n "$filepath" ] && [ -n "$dir" ]; then
+        tree -C "$dir" | less -r "+/$filepath" -j 5
+    else
+        tree -C | less -r
+    fi
+fi
 
 if [[ -s "$tempfile" ]]; then
     paths=$(cat "$tempfile")
