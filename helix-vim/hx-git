@@ -24,7 +24,12 @@ do_delta()
 
 do_tig()
 {
-    tig $@
+    _cmd=$1
+    if [ "$_cmd" == log ]; then
+        tig
+    else
+        tig $@
+    fi
     exit 0
 }
 
@@ -67,10 +72,10 @@ case $COMMAND in
     diff|show)
         do_delta_first $@
         ;;
-    blame)
+    blame|log)
         do_tig_first $@
         ;;
-    log|status|grep)
+    status|grep)
         do_git $@
         ;;
     *)

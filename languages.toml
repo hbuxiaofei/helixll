@@ -18,3 +18,13 @@ command = "clippy"
 # cpp
 [[language]]
 name = "cpp"
+
+
+# golang
+[[language]]
+name = "go"
+auto-format = false
+language-servers = [ "gopls" ]
+
+[language-server.gopls]
+command = "gopls"

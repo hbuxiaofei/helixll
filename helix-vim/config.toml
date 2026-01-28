@@ -40,13 +40,13 @@ display-inlay-hints = true
 
 ################ key map ######################
 [keys.normal.F10]
-B = ":sh zellij run -f -x 1%% -y 1%% --width 98%% --height 98%% -- ~/.config/helix/hx-git-delta blame %{buffer_name}"
-D = ":sh zellij run -f -x 1%% -y 1%% --width 98%% --height 98%% -- ~/.config/helix/hx-git-delta diff"
-L = ":sh zellij run -f -x 1%% -y 1%% --width 98%% --height 98%% -- ~/.config/helix/hx-git-delta log"
+B = ":sh zellij r -f -x 1%% -y 1%% --width 98%% --height 98%% -- ~/.config/helix/hx-git blame %{buffer_name}"
+D = ":sh zellij r -f -x 1%% -y 1%% --width 98%% --height 98%% -- ~/.config/helix/hx-git diff"
+L = ":sh zellij r -f -x 1%% -y 1%% --width 98%% --height 98%% -- ~/.config/helix/hx-git log"
 
 [keys.normal]
-F7 = ":sh zellij run -c -f -x 5%%  -y 5%%  --width 90%% --height 90%% -- ~/.config/helix/hx-picker %{buffer_name}"
-F9 = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- bash"
+F7 = ":sh zellij r -c -f -x 5%%  -y 5%%  --width 90%% --height 90%% -- ~/.config/helix/hx-picker %{buffer_name}"
+F9 = ":sh zellij r -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- bash"
 
 # Some nice Helix stuff
 C-k = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before", "collapse_selection"]
