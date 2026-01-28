@@ -1,0 +1,67 @@
+#!/bin/bash
+
+COMMAND=$1
+
+export DELTA_CMD=delta
+export DELTA_DIFFFILTER="delta --color-only"
+export DELTA_NAVIGATE=true
+export DELTA_SIDEBYSIDE=false
+export DELTA_LINENUMBERS=true
+
+
+do_delta()
+{
+    git --config-env=core.pager=DELTA_CMD \
+        --config-env=interactive.diffFilter=DELTA_DIFFFILTER \
+        --config-env=delta.navigate=DELTA_NAVIGATE  \
+        --config-env=delta.side-by-side=DELTA_SIDEBYSIDE \
+        --config-env=delta.line-numbers=DELTA_LINENUMBERS \
+        $@
+    exit 0
+}
+
+do_tig()
+{
+    tig $@
+    exit 0
+}
+
+do_git()
+{
+    _cmd=$1
+    if [ "$_cmd" == log ]; then
+        git $@ --pretty=format:"%h - %an %ae, %ar : %s"
+    else
+        git $@
+    fi
+    exit 0
+}
+
+do_delta_first()
+{
+    if command -v delta 2>/dev/null ; then
+        do_delta $@
+    elif command -v tig 2>/dev/null ; then
+        do_tig $@
+    else
+        do_git $@
+    fi
+}
+
+do_tig_first()
+{
+    if command -v tig 2>/dev/null ; then
+        do_tig $@
+    elif command -v delta 2>/dev/null ; then
+        do_delta $@
+    else
+        do_git $@
+    fi
+
+}
+
+if [ "$COMMAND" == diff ]; then
+    do_delta_first $@
+else
+    do_tig_first $@
+fi

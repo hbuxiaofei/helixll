@@ -88,7 +88,7 @@ cp -rf themes ${INSTALL_HOME}/.config/helix/
 
 cp -f ./languages.toml ${INSTALL_HOME}/.config/helix/
 
-cat > ${INSTALL_BIN}/helix << EOF
+cat > ${INSTALL_BIN}/helix << HELIX_EOF
 #!/bin/bash
 
 TEMP_LAYOUT=\$(mktemp)
@@ -127,7 +127,8 @@ EOF
 zellij --layout \$TEMP_LAYOUT
 
 rm -f "\$TEMP_LAYOUT"
-EOF
+HELIX_EOF
+
 chmod +x ${INSTALL_BIN}/helix
 
 echo -e "\033[32m- [Info] Install successfully...\033[0m"

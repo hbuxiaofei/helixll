@@ -1,0 +1,25 @@
+#!/bin/bash
+#
+# https://zenn.dev/spacemarket/articles/192a58e9177961
+#
+
+tempfile=$(mktemp)
+yazi --chooser-file="$tempfile" $@
+
+if [[ -s "$tempfile" ]]; then
+    paths=$(cat "$tempfile")
+
+    # For the "search://" format, extract the actual path.
+    if [[ "$paths" == search://* ]]; then
+        paths=$(echo "$paths" | sed 's|search://[^/]*/||')
+    fi
+
+    rm -f "$tempfile"
+    zellij action toggle-floating-panes
+    zellij action write 27
+    zellij action write-chars ":open \"$paths\""
+    zellij action write 13
+else
+    rm -f "$tempfile"
+    zellij action toggle-floating-panes
+fi
