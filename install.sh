@@ -33,11 +33,27 @@ else
         fi
     fi
 fi
+if ! command -v hx >/dev/null 2>&1; then
+    echo -e "\033[33m- [Err] hx command install failed\033[0m"
+    exit 1
+fi
+
 
 [ ! -d $INSTALL_BIN ] && mkdir -p $INSTALL_BIN
 
-if ! command -v hx >/dev/null 2>&1; then
-    echo -e "\033[33m- [Err] hx command install failed\033[0m"
+ZJ_VERSION="v0.43.1"
+if command -v zellij >/dev/null 2>&1; then
+    echo -e "\033[33m- [Warn] zellij command already exist\033[0m"
+else
+    if [ ! -e zellij-x86_64-unknown-linux-musl.tar.gz ]; then
+        wget https://github.com/zellij-org/zellij/releases/download/${ZJ_VERSION}/zellij-x86_64-unknown-linux-musl.tar.gz
+    fi
+    if [ -e zellij-x86_64-unknown-linux-musl.tar.gz ]; then
+        tar -xf zellij-x86_64-unknown-linux-musl.tar.gz -C ${INSTALL_BIN}/
+    fi
+fi
+if ! command -v zellij >/dev/null 2>&1; then
+    echo -e "\033[33m- [Err] zellij command install failed\033[0m"
     exit 1
 fi
 

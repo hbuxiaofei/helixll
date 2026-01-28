@@ -40,9 +40,9 @@ display-inlay-hints = true
 
 ################ key map ######################
 [keys.normal.F10]
-B = ":sh zellij r -f -x 1%% -y 1%% --width 98%% --height 98%% -- ~/.config/helix/git-hx blame %{buffer_name}"
-D = ":sh zellij r -f -x 1%% -y 1%% --width 98%% --height 98%% -- ~/.config/helix/git-hx diff"
-L = ":sh zellij r -f -x 1%% -y 1%% --width 98%% --height 98%% -- ~/.config/helix/git-hx log"
+B = ":sh zellij r -c -f -x 1%% -y 1%% --width 98%% --height 98%% -- git-hx blame %{buffer_name}"
+D = ":sh zellij r -c -f -x 1%% -y 1%% --width 98%% --height 98%% -- git-hx diff"
+L = ":sh zellij r -c -f -x 1%% -y 1%% --width 98%% --height 98%% -- git-hx log"
 
 [keys.normal]
 F7 = ":sh zellij r -c -f -x 5%%  -y 5%%  --width 90%% --height 90%% -- ~/.config/helix/picker-hx %{buffer_name}"
