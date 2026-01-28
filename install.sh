@@ -83,6 +83,7 @@ if [ ! -d ${INSTALL_HOME}/.config/helix ]; then
 fi
 cp -f helix-vim/config.toml ${INSTALL_HOME}/.config/helix/
 cp -f helix-vim/git-hx ${INSTALL_HOME}/.config/helix/ && chmod +x ${INSTALL_HOME}/.config/helix/git-hx
+ln -sf ${INSTALL_HOME}/.config/helix/git-hx ${INSTALL_BIN}/git-hx
 cp -f helix-vim/picker-hx ${INSTALL_HOME}/.config/helix/ && chmod +x ${INSTALL_HOME}/.config/helix/picker-hx
 cp -rf themes ${INSTALL_HOME}/.config/helix/
 
