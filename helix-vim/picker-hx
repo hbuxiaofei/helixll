@@ -4,7 +4,7 @@
 #
 
 tempfile=$(mktemp)
-if command yazi 2>/dev/null; then
+if command -v yazi >/dev/null 2>&1; then
     yazi --chooser-file="$tempfile" $@
 else
     dir=$(dirname $1 2>/dev/null)
