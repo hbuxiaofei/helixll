@@ -40,13 +40,18 @@ display-inlay-hints = true
 
 ################ key map ######################
 [keys.normal.F10]
-B = ":sh zellij r -c -f -x 1%% -y 1%% --width 98%% --height 98%% -- git-hx blame %{buffer_name}"
+# https://gist.github.com/gabydd/570f0dd5f71dda35241500c18f5d27e3
+B = ":sh zellij r -c -f -x 1%% -y 1%% --width 98%% --height 98%% -- git-hx blame %{buffer_name} +%{cursor_line}"
 D = ":sh zellij r -c -f -x 1%% -y 1%% --width 98%% --height 98%% -- git-hx diff"
 L = ":sh zellij r -c -f -x 1%% -y 1%% --width 98%% --height 98%% -- git-hx log"
 
 [keys.normal]
 F7 = ":sh zellij r -c -f -x 5%%  -y 5%%  --width 90%% --height 90%% -- ~/.config/helix/picker-hx %{buffer_name}"
 F9 = ":sh zellij r -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- bash"
+
+# Quick iteration on config changes
+# C-o = ":config-open"
+# C-r = ":config-reload"
 
 # Some nice Helix stuff
 C-k = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before", "collapse_selection"]

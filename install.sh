@@ -131,6 +131,11 @@ cp -f ./languages.toml ${INSTALL_HOME}/.config/helix/
 cat > ${INSTALL_BIN}/helix << HELIX_EOF
 #!/bin/bash
 
+quoted_args=()
+for arg in "\$@"; do
+    quoted_args+=("\"\$arg\"")
+done
+
 TEMP_LAYOUT=\$(mktemp)
 
 cat > "\$TEMP_LAYOUT" << EOF
@@ -156,7 +161,7 @@ keybinds clear-defaults=true {
 layout {
     pane name="helix-editor" {
         command "hx"
-        args "\$@"
+        args \${quoted_args[*]}
         close_on_exit true
     }
     pane size=1 borderless=true {
