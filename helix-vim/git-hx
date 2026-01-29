@@ -8,6 +8,10 @@ export DELTA_DARK=true
 export DELTA_NAVIGATE=true
 export DELTA_SIDEBYSIDE=false
 export DELTA_LINENUMBERS=true
+export BLAME_CODE_STYLE=syntax
+export BLAME_PALETTE="#55007f #7f007f #7f7f00 #aa0044 #44aa00 #0044aa #007f7f #007f00"
+export BLAME_FORMAT="{commit:<10} {timestamp:<16} {author:<16}"
+export BLAME_TIME_FORMAT="%Y-%m-%d %H:%M"
 
 
 do_delta()
@@ -18,6 +22,10 @@ do_delta()
         --config-env=delta.dark=DELTA_DARK \
         --config-env=delta.side-by-side=DELTA_SIDEBYSIDE \
         --config-env=delta.line-numbers=DELTA_LINENUMBERS \
+        --config-env=delta.blame-code-style=BLAME_CODE_STYLE \
+        --config-env=delta.blame-palette=BLAME_PALETTE \
+        --config-env=delta.blame-format=BLAME_FORMAT \
+        --config-env=delta.blame-timestamp-output-format=BLAME_TIME_FORMAT \
         $@
     exit 0
 }
