@@ -3,9 +3,15 @@
 # https://zenn.dev/spacemarket/articles/192a58e9177961
 #
 
-tempfile=$(mktemp)
+tempdir=""
+tempfile=""
 if command -v yazi >/dev/null 2>&1; then
+    tempfile=$(mktemp)
     yazi --chooser-file="$tempfile" $@
+elif command -v fff >/dev/null 2>&1; then
+    tempdir=$(mktemp -d)
+    tempfile=${tempdir}/fff/opened_file
+    XDG_CACHE_HOME=${tempdir} fff -p
 else
     dir=$(dirname $1 2>/dev/null)
     filepath=$(basename $1 2>/dev/null)
@@ -16,7 +22,7 @@ else
     fi
 fi
 
-if [[ -s "$tempfile" ]]; then
+if [[ -f "$tempfile" ]]; then
     paths=$(cat "$tempfile")
 
     # For the "search://" format, extract the actual path.
@@ -25,11 +31,13 @@ if [[ -s "$tempfile" ]]; then
     fi
 
     rm -f "$tempfile"
+    [[ -d "$tempdir" ]] && rm -rf "$tempdir"
     zellij action toggle-floating-panes
     zellij action write 27
     zellij action write-chars ":open \"$paths\""
     zellij action write 13
 else
-    rm -f "$tempfile"
+    [[ -f "$tempfile" ]] && rm -f "$tempfile"
+    [[ -d "$tempdir" ]] && rm -rf "$tempdir"
     zellij action toggle-floating-panes
 fi
