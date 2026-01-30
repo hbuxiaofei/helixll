@@ -10,12 +10,19 @@ export DELTA_SIDEBYSIDE=false
 export DELTA_LINENUMBERS=true
 export BLAME_CODE_STYLE=syntax
 export BLAME_PALETTE="#55007f #7f007f #7f7f00 #aa0044 #44aa00 #0044aa #007f7f #007f00"
-export BLAME_FORMAT="{commit:<10} {timestamp:<16} {author:<16}"
+export BLAME_FORMAT="{commit:<8} {timestamp:<16} {author:<18}"
 export BLAME_TIME_FORMAT="%Y-%m-%d %H:%M"
 
 
 do_delta()
 {
+    filtered_args=()
+    for _arg in "$@"; do
+        if [[ "$_arg" != +* ]]; then
+            filtered_args+=("$_arg")
+        fi
+    done
+
     git --config-env=core.pager=DELTA_CMD \
         --config-env=interactive.diffFilter=DELTA_DIFFFILTER \
         --config-env=delta.navigate=DELTA_NAVIGATE  \
@@ -26,7 +33,7 @@ do_delta()
         --config-env=delta.blame-palette=BLAME_PALETTE \
         --config-env=delta.blame-format=BLAME_FORMAT \
         --config-env=delta.blame-timestamp-output-format=BLAME_TIME_FORMAT \
-        $@
+        ${filtered_args[@]}
     exit 0
 }
 
