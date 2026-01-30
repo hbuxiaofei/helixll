@@ -39,6 +39,8 @@ do_delta()
 
 do_tig()
 {
+    # Ref: https://jonas.github.io/tig/doc/tig.1.html
+    export XDG_CONFIG_HOME=~/.config/helix
     _cmd=$1
     if [ "$_cmd" == log ]; then
         shift

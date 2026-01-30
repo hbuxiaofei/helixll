@@ -136,6 +136,11 @@ chmod +x ${INSTALL_HOME}/.config/helix/fff
 cp -rf themes ${INSTALL_HOME}/.config/helix/
 cp -f languages.toml ${INSTALL_HOME}/.config/helix/
 
+if [ -d ${INSTALL_HOME}/.config/helix/tig ]; then
+    rm -rf ${INSTALL_HOME}/.config/helix/tig
+fi
+cp -rf helix-vim/tig ${INSTALL_HOME}/.config/helix/
+
 cat > ${INSTALL_BIN}/helix << HELIX_EOF
 #!/bin/bash
 

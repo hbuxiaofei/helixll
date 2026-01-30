@@ -1,0 +1,5 @@
+set blame-view = \
+    date:no \
+    author:abbreviated \
+    id:yes,color \
+    line-number:yes,interval=1 text
