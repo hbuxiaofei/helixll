@@ -8,10 +8,10 @@ tempfile=""
 if command -v yazi >/dev/null 2>&1; then
     tempfile=$(mktemp)
     yazi --chooser-file="$tempfile" $@
-elif command -v fff >/dev/null 2>&1; then
+elif [ -x ~/.config/helix/fff ]; then
     tempdir=$(mktemp -d)
     tempfile=${tempdir}/fff/opened_file
-    XDG_CACHE_HOME=${tempdir} fff -p
+    XDG_CACHE_HOME=${tempdir} ~/.config/helix/fff -p $(dirname $@ 2>/dev/null)
 else
     dir=$(dirname $1 2>/dev/null)
     filepath=$(basename $1 2>/dev/null)

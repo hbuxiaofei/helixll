@@ -6,7 +6,7 @@ export PATH=$INSTALL_BIN:$PATH
 INSTALL_HOME=$HOME
 [ -n "$SUDO_USER" ] && INSTALL_HOME=/home/$SUDO_USER
 
-cd $(dirname $0)
+cd $(dirname $0) || exit 1
 
 HX_VERSION="25.07.1"
 if command -v hx >/dev/null 2>&1; then
@@ -120,13 +120,21 @@ fi
 if [ ! -d ${INSTALL_HOME}/.config/helix ]; then
     mkdir -p ${INSTALL_HOME}/.config/helix
 fi
-cp -f helix-vim/config.toml ${INSTALL_HOME}/.config/helix/
-cp -f helix-vim/git-hx ${INSTALL_HOME}/.config/helix/ && chmod +x ${INSTALL_HOME}/.config/helix/git-hx
-ln -sf ${INSTALL_HOME}/.config/helix/git-hx ${INSTALL_BIN}/git-hx
-cp -f helix-vim/picker-hx ${INSTALL_HOME}/.config/helix/ && chmod +x ${INSTALL_HOME}/.config/helix/picker-hx
-cp -rf themes ${INSTALL_HOME}/.config/helix/
 
-cp -f ./languages.toml ${INSTALL_HOME}/.config/helix/
+cp -f helix-vim/config.toml ${INSTALL_HOME}/.config/helix/
+
+cp -f helix-vim/git-hx ${INSTALL_HOME}/.config/helix/
+chmod +x ${INSTALL_HOME}/.config/helix/git-hx
+ln -sf ${INSTALL_HOME}/.config/helix/git-hx ${INSTALL_BIN}/git-hx
+
+cp -f helix-vim/picker-hx ${INSTALL_HOME}/.config/helix/
+chmod +x ${INSTALL_HOME}/.config/helix/picker-hx
+
+cp -f helix-vim/fff ${INSTALL_HOME}/.config/helix/
+chmod +x ${INSTALL_HOME}/.config/helix/fff
+
+cp -rf themes ${INSTALL_HOME}/.config/helix/
+cp -f languages.toml ${INSTALL_HOME}/.config/helix/
 
 cat > ${INSTALL_BIN}/helix << HELIX_EOF
 #!/bin/bash
