@@ -1,10 +1,11 @@
 set blame-view = \
-    date:no \
-    author:full \
     id:yes,color \
+    author:full \
+    date:default \
     line-number:yes,interval=1 text
 
 set main-view = \
-    id:yes date:default \
+    id:yes \
+    date:default \
     author:full \
     commit-title:yes,graph,refs,overflow=no
